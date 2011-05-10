@@ -35,3 +35,9 @@ check:
 crosslang:
 	@echo "do ERL_LIBS=../ before you make crosslang or fail"
 	cd test && make crosslang
+
+distclean: clean
+	@rm -rf basho_bench deps
+
+results:
+	priv/summary.r -i tests/current
