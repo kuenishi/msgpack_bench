@@ -1,4 +1,5 @@
 ebin/*.beam
+ebin/msgpack_bench.app
 deps/
 tests/
 basho_bench
