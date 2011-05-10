@@ -39,5 +39,8 @@ crosslang:
 distclean: clean
 	@rm -rf basho_bench deps
 
+bench: compile
+	./deps/basho_bench/basho_bench msgpack.config
+
 results:
 	priv/summary.r -i tests/current
