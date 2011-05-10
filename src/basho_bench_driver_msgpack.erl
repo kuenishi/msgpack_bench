@@ -31,5 +31,5 @@ new(_Id)->
 run(_, _KeyGen, _ValueGen, State)->
 %    Key = 
     MPRC = State,
-    _ = mprc:call(MPRC, add, [120, 234]),
+    {354, _} = mprc:call(MPRC, add, [120, 234]),
     {ok, State}.
