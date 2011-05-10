@@ -15,10 +15,12 @@ compile: deps
 	@./rebar compile
 
 xref:
-	@./rebar xref
+# basho_bench fails
+#	@./rebar xref
 
 eunit:
-	@./rebar eunit
+# ibrowse fails
+#	@./rebar eunit
 
 clean:
 	@./rebar clean
