@@ -1,4 +1,4 @@
-.PHONY: compile xref eunit clean doc check make
+.PHONY: compile xref eunit clean doc check make deps
 
 all: compile xref eunit
 
@@ -8,7 +8,10 @@ ma: all
 mak: all
 make: all
 
-compile:
+deps: rebar.config
+	@./rebar get-deps
+
+compile: deps
 	@./rebar compile
 
 xref:
