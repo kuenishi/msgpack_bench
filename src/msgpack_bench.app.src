@@ -1,0 +1,12 @@
+{application, msgpack_bench,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { msgpack_bench_app, []}},
+  {env, []}
+ ]}.
