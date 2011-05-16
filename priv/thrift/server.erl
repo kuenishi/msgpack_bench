@@ -19,10 +19,12 @@
 
 -module(server).
 
--include("calculator_thrift.hrl").
-
--export([start/0, start/1, handle_function/2,
-         stop/1, ping/0, add/2, calculate/2, getStruct/1, zip/0]).
+-export([start/0,
+	 start/1,
+	 handle_function/2,
+						% calculate/2, getStruct/1, zip/0
+         stop/1, ping/0, add/2
+	]).
 
 debug(Format, Data) ->
     error_logger:info_msg(Format, Data).
@@ -35,32 +37,30 @@ add(N1, N2) ->
     debug("add(~p,~p)",[N1,N2]),
     N1+N2.
 
-calculate(Logid, Work) ->
-    { Op, Num1, Num2 } = { Work#work.op, Work#work.num1, Work#work.num2 },
-    debug("calculate(~p, {~p,~p,~p})", [Logid, Op, Num1, Num2]),
-    case Op of
-        ?tutorial_Operation_ADD      -> Num1 + Num2;
-        ?tutorial_Operation_SUBTRACT -> Num1 - Num2;
-        ?tutorial_Operation_MULTIPLY -> Num1 * Num2;
+%% calculate(Logid, Work) ->
+%%     { Op, Num1, Num2 } = { Work#work.op, Work#work.num1, Work#work.num2 },
+%%     debug("calculate(~p, {~p,~p,~p})", [Logid, Op, Num1, Num2]),
+%%     case Op of
+%%         ?tutorial_Operation_ADD      -> Num1 + Num2;
+%%         ?tutorial_Operation_SUBTRACT -> Num1 - Num2;
+%%         ?tutorial_Operation_MULTIPLY -> Num1 * Num2;
 
-        ?tutorial_Operation_DIVIDE when Num2 == 0 ->
-          throw(#invalidOperation{what=Op, why="Cannot divide by 0"});
-        ?tutorial_Operation_DIVIDE ->
-          Num1 div Num2;
+%%         ?tutorial_Operation_DIVIDE when Num2 == 0 ->
+%%           throw(#invalidOperation{what=Op, why="Cannot divide by 0"});
+%%         ?tutorial_Operation_DIVIDE ->
+%%           Num1 div Num2;
 
-        _Else ->
-          throw(#invalidOperation{what=Op, why="Invalid operation"})
-    end.
+%%         _Else ->
+%%           throw(#invalidOperation{what=Op, why="Invalid operation"})
+%%     end.
 
-getStruct(Key) ->
-    debug("getStruct(~p)", [Key]),
-    #sharedStruct{key=Key, value="RARG"}.
+%% getStruct(Key) ->
+%%     debug("getStruct(~p)", [Key]),
+%%     #sharedStruct{key=Key, value="RARG"}.
 
 zip() ->
     debug("zip", []),
     ok.
-
-%%
 
 start() ->
     start(9999).
@@ -68,7 +68,7 @@ start() ->
 start(Port) ->
     Handler   = ?MODULE,
     thrift_socket_server:start([{handler, Handler},
-                                {service, calculator_thrift},
+                                {service, sample_thrift},
                                 {port, Port},
                                 {name, tutorial_server}]).
 

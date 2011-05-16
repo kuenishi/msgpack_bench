@@ -19,20 +19,20 @@
 
 -module(client).
 
--include("calculator_thrift.hrl").
+%% -include("calculator_thrift.hrl").
 
 -export([t/0]).
 
-p(X) ->
-    io:format("~p~n", [X]),
-    ok.
+%% p(X) ->
+%%     io:format("~p~n", [X]),
+%%     ok.
 
 t() ->
     Port = 9999,
 
     {ok, Client0} = thrift_client_util:new("127.0.0.1",
                                            Port,
-                                           calculator_thrift,
+                                           sample_thrift,
                                            []),
 
     {Client1, {ok, ok}} = thrift_client:call(Client0, ping, []),
@@ -44,35 +44,35 @@ t() ->
     {Client3, {ok, Sum1}} = thrift_client:call(Client2, add, [1, 4]),
     io:format("1+4=~p~n", [Sum1]),
 
-    Work = #work{op=?tutorial_Operation_SUBTRACT,
-                 num1=15,
-                 num2=10},
-    {Client4, {ok, Diff}} = thrift_client:call(Client3, calculate, [1, Work]),
-    io:format("15-10=~p~n", [Diff]),
+    %% Work = #work{op=?tutorial_Operation_SUBTRACT,
+    %%              num1=15,
+    %%              num2=10},
+    %% {Client4, {ok, Diff}} = thrift_client:call(Client3, calculate, [1, Work]),
+    %% io:format("15-10=~p~n", [Diff]),
 
-    {Client5, {ok, Log}} = thrift_client:call(Client4, getStruct, [1]),
-    io:format("Log: ~p~n", [Log]),
+    %% {Client5, {ok, Log}} = thrift_client:call(Client4, getStruct, [1]),
+    %% io:format("Log: ~p~n", [Log]),
 
-    Client6 =
-        try
-            Work1 = #work{op=?tutorial_Operation_DIVIDE,
-                          num1=1,
-                          num2=0},
-            {ClientS1, {ok, _Quot}} = thrift_client:call(Client5, calculate, [2, Work1]),
+    %% Client6 =
+    %%     try
+    %%         Work1 = #work{op=?tutorial_Operation_DIVIDE,
+    %%                       num1=1,
+    %%                       num2=0},
+    %%         {ClientS1, {ok, _Quot}} = thrift_client:call(Client5, calculate, [2, Work1]),
 
-            io:format("LAME: exception handling is broken~n", []),
-            ClientS1
-        catch
-            throw:{ClientS2, Z} ->
-                io:format("Got exception where expecting - the " ++
-                          "following is NOT a problem!!!~n"),
-                p(Z),
-                ClientS2
-        end,
+    %%         io:format("LAME: exception handling is broken~n", []),
+    %%         ClientS1
+    %%     catch
+    %%         throw:{ClientS2, Z} ->
+    %%             io:format("Got exception where expecting - the " ++
+    %%                       "following is NOT a problem!!!~n"),
+    %%             p(Z),
+    %%             ClientS2
+    %%     end,
 
 
-    {Client7, {ok, ok}} = thrift_client:call(Client6, zip, []),
-    io:format("zip~n", []),
+    %% {Client7, {ok, ok}} = thrift_client:call(Client6, zip, []),
+    %% io:format("zip~n", []),
 
-    {_Client8, ok} = thrift_client:close(Client7),
+    {_Client8, ok} = thrift_client:close(Client3),
     ok.
