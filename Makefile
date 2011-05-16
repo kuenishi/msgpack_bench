@@ -22,6 +22,12 @@ eunit:
 # ibrowse fails
 #	@./rebar eunit
 
+thrift:
+	cd priv/thrift && thrift --gen erl bench.thrift
+	cd priv/thrift/gen-erl && erl -make
+	cd priv/thrift && erl -make
+	mv priv/thrift/gen-erl/*.beam ebin/
+
 clean:
 	@./rebar clean
 

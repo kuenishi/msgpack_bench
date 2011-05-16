@@ -30,11 +30,11 @@ debug(Format, Data) ->
     error_logger:info_msg(Format, Data).
 
 ping() ->
-    debug("ping()",[]),
+%    debug("ping()",[]),
     ok.
 
 add(N1, N2) ->
-    debug("add(~p,~p)",[N1,N2]),
+%    debug("add(~p,~p)",[N1,N2]),
     N1+N2.
 
 %% calculate(Logid, Work) ->
@@ -63,7 +63,7 @@ zip() ->
     ok.
 
 start() ->
-    start(9999).
+    start(9199).
 
 start(Port) ->
     Handler   = ?MODULE,
