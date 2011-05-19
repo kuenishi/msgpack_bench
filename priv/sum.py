@@ -48,7 +48,7 @@ def get_nums(dir):
         n += int(row[2])
         elapsed = float(row[0])
         sum += float(row[4]) * int(row[2])
-    ave_latency = sum / n
+    ave_latency = sum / n / 1000.0 # usec => msec
 #    print "latency: %f" % ave_latency
     return (get_concurrency(dir), thruput, ave_latency)
 
@@ -59,35 +59,47 @@ def analyze_dir(dir):
 #print analyze_dir(dir)
 dirs = ['cpp-srv', 'erlang-srv', 'ruby-srv', 'thrift']
 
-gp = Gnuplot.Gnuplot()
-
-gp('set terminal postscript enhanced')
-gp('set output "chaos.eps"')
-gp.title("Throughput graph")
+def get_gp(filename):
+    _gp = Gnuplot.Gnuplot()
+    _gp('set terminal postscript enhanced')
+    _gp('set output "%s"' % filename)
 #gp('set xtics 10')
-gp('set logscale x')
-gp.xlabel("client concurrency")
-gp.ylabel("Throughput [RPCs/sec]")
-gp('set style data lines')
-gp('set xrange [8:12000]')
+    _gp('set logscale x')
+    _gp.xlabel("client concurrency")
+    _gp('set style data lines')
+    _gp('set xrange [8:12000]')
 #gp('help set')
 #gp('set style line 1 lt 2 lw 4')
-gp('set grid')
+    _gp('set grid')
+    return _gp
 
-pp = []
+gp = get_gp("thruput.eps")
+gp2 = get_gp("latency.eps")
+
+gp.title("Average Throughput graph")
+gp.ylabel("Average Throughput [RPCs/sec]")
+gp2.title("Average Latency graph")
+gp2.ylabel("Average Latency [msec]")
+gp2('set logscale y')
+
+th_ps = []
+lat_ps = []
 for dir in dirs:
     th = []
+    lat = []
     for d in os.listdir(dir):
         t = analyze_dir('/'.join([dir,d]))
 #        print c,t,l
         th.append((t[0], t[1]))
+        lat.append((t[0], t[2]))
 #        print dir,t
     th.sort(key=lambda x: x[0])
-    print dir, th
-    p = Gnuplot.PlotItems.Data(th, title=dir)
-#    p = Gnuplot.PlotItems.PlotItem() #, title=dir)
-    pp.append(p)
+    lat.sort()
+    print dir, th, lat
+    th_ps.append( Gnuplot.PlotItems.Data(th, title=dir) )
+    lat_ps.append( Gnuplot.PlotItems.Data(lat, title=dir) )
     #gp.plot(p)
     #break
-gp.plot(*pp)
+gp.plot(*th_ps)
+gp2.plot(*lat_ps)
 #gp.plot(p)
